@@ -12,15 +12,14 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
+    Route::middleware('throttle:api')->group(function () {
 
-    Route::get('/health', function () {
-        return response()->json([
-            'success' => true,
-            'message' => 'API is running',
-            'version' => 'v1',
-        ]);
+        Route::get('/health', function () {
+            return response()->json([
+                'success' => true,
+                'message' => 'API is running',
+                'version' => 'v1',
+            ]);
+        });
     });
-
-    
 });
-
