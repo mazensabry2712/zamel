@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 Route::get('/user', function (Request $request) {
@@ -12,7 +14,40 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(function () {
 
-    Route::middleware('throttle:api')->group(function () {
+    Route::prefix('auth')->group(function () {
+
+        Route::post('/register', [
+            AuthController::class,
+            'register',
+        ]);
+
+        Route::post('/login', [
+            AuthController::class,
+            'login',
+        ]);
+
+        Route::middleware('auth:sanctum')->group(function () {
+
+            Route::get('/me', [
+                AuthController::class,
+                'me',
+            ]);
+
+        });
+
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
 
         Route::get('/health', function () {
             return response()->json([
