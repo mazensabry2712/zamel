@@ -20,10 +20,20 @@ class RegisterUser
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-          'university_id' => $data['university_id'],
-        'faculty_id' => $data['faculty_id'],
-        // 'department_id' => $data['department_id'],
-        'academic_year_id' => $data['academic_year_id'],
+            'university_id' => $data['university_id'],
+            'faculty_id' => $data['faculty_id'],
+            'academic_year_id' => $data['academic_year_id'],
+
+
+
         ]);
+
+        // $user->profile()->create([
+        //     'university_id' => $data['university_id'],
+        //     'faculty_id' => $data['faculty_id'],
+        //     'academic_year_id' => $data['academic_year_id'],
+        // ]);
+
+        // return $user;
     }
 }

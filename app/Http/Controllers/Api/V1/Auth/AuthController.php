@@ -7,19 +7,54 @@ use App\Actions\Auth\RegisterUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
 use App\Support\ApiResponse;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+
 
 class AuthController extends Controller
 {
+    // public function register(
+    //     RegisterRequest $request,
+    //     RegisterUser $registerUser
+    // ) {
+    //     $user = $registerUser->execute(
+    //         $request->validated()
+    //     );
+
+    //     $token = $user->createToken(
+    //         'api-token'
+    //     )->plainTextToken;
+
+    //     return ApiResponse::success(
+    //         data: [
+    //             'user' => new UserResource($user),
+    //             'token' => $token,
+    //         ],
+    //         message: 'Registration successful.',
+    //         status: 201
+    //     );
+    //     // dd('Hello Mazen, Laravel is reading the correct file!');
+    // }
+    // لاحظ إننا استخدمنا Request العادي بدل RegisterRequest لتخطي الكاش
     public function register(
-        RegisterRequest $request,
+        \Illuminate\Http\Request $request,
         RegisterUser $registerUser
     ) {
-        $user = $registerUser->execute(
-            $request->validated()
-        );
+        // 1. نقوم بعمل التحقق (Validation) هنا مباشرة لإجبار لارافيل على قراءة الحقول
+        $validatedData = $request->validate([
+            'name' => ['required', 'string', 'min:2', 'max:100'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'university_id' => ['required', 'integer'],
+            'faculty_id' => ['required', 'integer'],
+            'academic_year_id' => ['required', 'integer'],
+        ]);
+
+        // 2. نمرر البيانات المعتمدة مباشرة
+        $user = $registerUser->execute($validatedData);
 
         $token = $user->createToken(
             'api-token'
@@ -34,7 +69,6 @@ class AuthController extends Controller
             status: 201
         );
     }
-
 
 
     public function login(
@@ -71,14 +105,38 @@ class AuthController extends Controller
     }
 
     public function me()
-{
-    return ApiResponse::success(
-        data: [
-            'user' => new UserResource(
-                request()->user()
-            ),
-        ],
-        message: 'User retrieved successfully.'
-    );
-}
+    {
+        return ApiResponse::success(
+            data: [
+                'user' => new UserResource(
+                    request()->user()
+                ),
+            ],
+            message: 'User retrieved successfully.'
+        );
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return ApiResponse::success(
+            message: 'Logout successful.'
+        );
+    }
+
+
+    public function profile(Request $request)
+    {
+        $profile = $request->user()->profile;
+
+        return ApiResponse::success(
+            data: [
+                'profile' => $profile
+                    ? new ProfileResource($profile)
+                    : null,
+            ],
+            message: 'Profile retrieved successfully.'
+        );
+    }
 }

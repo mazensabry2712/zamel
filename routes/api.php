@@ -16,15 +16,22 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('auth')->group(function () {
 
+
+
         Route::post('/register', [
             AuthController::class,
             'register',
         ]);
 
+
+
+
         Route::post('/login', [
             AuthController::class,
             'login',
         ]);
+
+
 
         Route::middleware('auth:sanctum')->group(function () {
 
@@ -33,28 +40,23 @@ Route::prefix('v1')->group(function () {
                 'me',
             ]);
 
-        });
-
-    });
-
-});
-
-
-
-
-
-
-
-
-
-
-
-        Route::get('/health', function () {
-            return response()->json([
-                'success' => true,
-                'message' => 'API is running',
-                'version' => 'v1',
+            Route::post('/logout', [
+                AuthController::class,
+                'logout',
             ]);
         });
+        Route::get('/profile', [
+            AuthController::class,
+            'profile',
+        ]);
+    });
+
+
+    Route::get('/health', function () {
+        return response()->json([
+            'success' => true,
+            'message' => 'API is running',
+            'version' => 'v1',
+        ]);
     });
 });

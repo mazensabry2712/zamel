@@ -12,7 +12,6 @@ class Profile extends Model
         'education_type',
         'university_id',
         'faculty_id',
-        'department_id',
         'school_id',
         'academic_year_id',
         'phone',
@@ -25,17 +24,22 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    
     public function university()
     {
         return $this->belongsTo(University::class);
     }
+
+
 
     public function faculty()
     {
         return $this->belongsTo(Faculty::class);
     }
 
-  
+
+
 
     public function school()
     {
