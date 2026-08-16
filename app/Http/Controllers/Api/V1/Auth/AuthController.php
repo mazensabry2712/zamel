@@ -6,28 +6,22 @@ use App\Actions\Auth\LoginUser;
 use App\Actions\Auth\RegisterUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
 use App\Support\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use App\Http\Requests\Auth\RegisterRequest;
+
 class AuthController extends Controller
 {
     public function register(
         RegisterRequest $request,
         RegisterUser $registerUser
     ) {
-        $validatedData = $request->validate([
-            'name' => ['required', 'string', 'min:2', 'max:100'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'university_id' => ['required', 'integer'],
-            'faculty_id' => ['required', 'integer'],
-            'academic_year_id' => ['required', 'integer'],
-        ]);
-
-        $user = $registerUser->execute($validatedData);
+        $user = $registerUser->execute(
+            $request->validated()
+        );
 
         $token = $user->createToken(
             'api-token'
@@ -57,7 +51,6 @@ class AuthController extends Controller
 
             $request->clearRateLimiter();
         } catch (ValidationException $exception) {
-
             $request->hitRateLimiter();
 
             throw $exception;
@@ -97,25 +90,25 @@ class AuthController extends Controller
         );
     }
 
-   public function profile(Request $request)
-{
-    $profile = $request->user()
-        ->profile()
-        ->with([
-            'university',
-            'faculty',
-            'school',
-            'academicYear',
-        ])
-        ->first();
+    public function profile(Request $request)
+    {
+        $profile = $request->user()
+            ->profile()
+            ->with([
+                'university',
+                'faculty',
+                'school',
+                'academicYear',
+            ])
+            ->first();
 
-    return ApiResponse::success(
-        data: [
-            'profile' => $profile
-                ? new ProfileResource($profile)
-                : null,
-        ],
-        message: 'Profile retrieved successfully.'
-    );
-}
+        return ApiResponse::success(
+            data: [
+                'profile' => $profile
+                    ? new ProfileResource($profile)
+                    : null,
+            ],
+            message: 'Profile retrieved successfully.'
+        );
+    }
 }
