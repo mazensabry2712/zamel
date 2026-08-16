@@ -4,6 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RegisterRequest extends FormRequest
 {
@@ -35,6 +36,34 @@ class RegisterRequest extends FormRequest
                 'string',
                 'min:8',
                 'confirmed',
+            ],
+            'education_type' => [
+                'required',
+                Rule::in(['secondary', 'university', 'other']),
+            ],
+            'university_id' => [
+                'nullable',
+                'integer',
+                'exists:universities,id',
+                'required_if:education_type,university',
+            ],
+            'faculty_id' => [
+                'nullable',
+                'integer',
+                'exists:faculties,id',
+                'required_if:education_type,university',
+            ],
+            'school_id' => [
+                'nullable',
+                'integer',
+                'exists:schools,id',
+                'required_if:education_type,secondary',
+            ],
+            'academic_year_id' => [
+                'nullable',
+                'integer',
+                'exists:academic_years,id',
+                'required_if:education_type,university',
             ],
         ];
     }
