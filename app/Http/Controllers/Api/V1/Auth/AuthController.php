@@ -23,6 +23,8 @@ class AuthController extends Controller
             $request->validated()
         );
 
+        $user->load('profile');
+
         $token = $user->createToken(
             'api-token'
         )->plainTextToken;
@@ -30,6 +32,7 @@ class AuthController extends Controller
         return ApiResponse::success(
             data: [
                 'user' => new UserResource($user),
+                'profile' => new ProfileResource($user->profile),
                 'token' => $token,
             ],
             message: 'Registration successful.',
@@ -56,6 +59,8 @@ class AuthController extends Controller
             throw $exception;
         }
 
+        $user->load('profile');
+
         $token = $user
             ->createToken('api-token')
             ->plainTextToken;
@@ -63,19 +68,22 @@ class AuthController extends Controller
         return ApiResponse::success(
             data: [
                 'user' => new UserResource($user),
+                'profile' => $user->profile
+                    ? new ProfileResource($user->profile)
+                    : null,
                 'token' => $token,
             ],
             message: 'Login successful.'
         );
     }
 
-    public function me()
+    public function me(Request $request)
     {
+        $user = $request->user()->load('profile');
+
         return ApiResponse::success(
             data: [
-                'user' => new UserResource(
-                    request()->user()
-                ),
+                'user' => new UserResource($user),
             ],
             message: 'User retrieved successfully.'
         );
