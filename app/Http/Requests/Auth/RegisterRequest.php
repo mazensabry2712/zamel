@@ -36,18 +36,6 @@ class RegisterRequest extends FormRequest
                 'min:8',
                 'confirmed',
             ],
-            'university_id' => [
-                'required',
-                'integer',
-            ],
-            'faculty_id' => [
-                'required',
-                'integer',
-            ],
-            'academic_year_id' => [
-                'required',
-                'integer',
-            ],
         ];
     }
 }
