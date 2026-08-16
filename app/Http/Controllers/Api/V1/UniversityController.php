@@ -29,8 +29,6 @@ class UniversityController extends Controller
             message: 'University retrieved successfully.'
         );
     }
-<<<<<<< HEAD
-=======
 
     public function faculties(University $university)
     {
@@ -43,5 +41,4 @@ class UniversityController extends Controller
             message: 'University faculties retrieved successfully.'
         );
     }
->>>>>>> 9b584c399be498740e4073dad7543e71aafd55f6
 }
