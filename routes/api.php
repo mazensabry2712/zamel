@@ -45,7 +45,10 @@ Route::prefix('v1')->group(function () {
             ]);
         });
     });
-
+    Route::get('/universities', [
+        UniversityController::class,
+        'index',
+    ]);
     Route::get('/health', function () {
         return response()->json([
             'success' => true,
@@ -53,4 +56,5 @@ Route::prefix('v1')->group(function () {
             'version' => 'v1',
         ]);
     });
+
 });
