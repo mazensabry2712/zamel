@@ -9,6 +9,7 @@ use App\Support\ApiResponse;
 
 class UniversityController extends Controller
 {
+
     public function index()
     {
         $universities = University::query()
@@ -20,4 +21,14 @@ class UniversityController extends Controller
             message: 'Universities retrieved successfully.'
         );
     }
+
+
+    public function show(University $university){
+         return ApiResponse::success(
+            data: new UniversityResource($university),
+            message: 'University retrieved successfully.'
+          );
+    }
+
+    
 }
