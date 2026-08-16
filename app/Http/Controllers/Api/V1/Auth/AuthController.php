@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\V1\Auth;
 
 use App\Actions\Auth\LoginUser;
 use App\Actions\Auth\RegisterUser;
+use App\Actions\Profile\UpdateProfile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdateProfileRequest;
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\UserResource;
 use App\Support\ApiResponse;
@@ -117,6 +119,32 @@ class AuthController extends Controller
                     : null,
             ],
             message: 'Profile retrieved successfully.'
+        );
+    }
+
+    public function updateProfile(
+        UpdateProfileRequest $request,
+        UpdateProfile $updateProfile
+    ) {
+        $profile = $request->user()->profile;
+
+        $profile = $updateProfile->execute(
+            $profile,
+            $request->validated()
+        );
+
+        $profile->load([
+            'university',
+            'faculty',
+            'school',
+            'academicYear',
+        ]);
+
+        return ApiResponse::success(
+            data: [
+                'profile' => new ProfileResource($profile),
+            ],
+            message: 'Profile updated successfully.'
         );
     }
 }
