@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AcademicYearController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +48,7 @@ Route::prefix('v1')->group(function () {
             ]);
         });
     });
-
+    // University Context
     Route::get('/universities', [
         UniversityController::class,
         'index',
@@ -68,6 +69,18 @@ Route::prefix('v1')->group(function () {
         'index',
     ]);
 
+    // Category
+    Route::get('/categories', [
+        CategoryController::class,
+        'index',
+    ]);
+
+    Route::get('/categories/{category}', [
+        CategoryController::class,
+        'show',
+    ]);
+
+    // Test Api Health
     Route::get('/health', function () {
         return response()->json([
             'success' => true,
