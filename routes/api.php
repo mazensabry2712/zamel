@@ -38,6 +38,11 @@ Route::prefix('v1')->group(function () {
                 AuthController::class,
                 'updateProfile',
             ]);
+
+            Route::put('/change-password', [
+                AuthController::class,
+                'changePassword',
+            ]);
         });
     });
 
