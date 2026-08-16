@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FacultyResource;
 use App\Http\Resources\UniversityResource;
 use App\Models\University;
 use App\Support\ApiResponse;
 
 class UniversityController extends Controller
 {
-
     public function index()
     {
         $universities = University::query()
@@ -22,13 +22,23 @@ class UniversityController extends Controller
         );
     }
 
-
-    public function show(University $university){
-         return ApiResponse::success(
+    public function show(University $university)
+    {
+        return ApiResponse::success(
             data: new UniversityResource($university),
             message: 'University retrieved successfully.'
-          );
+        );
     }
 
-    
+    public function faculties(University $university)
+    {
+        $faculties = $university->faculties()
+            ->orderBy('name')
+            ->get();
+
+        return ApiResponse::success(
+            data: FacultyResource::collection($faculties),
+            message: 'University faculties retrieved successfully.'
+        );
+    }
 }
