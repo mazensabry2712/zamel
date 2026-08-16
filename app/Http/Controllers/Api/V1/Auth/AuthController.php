@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Actions\Auth\ChangeUserPassword;
 use App\Actions\Auth\LoginUser;
 use App\Actions\Auth\RegisterUser;
 use App\Actions\Profile\UpdateProfile;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\ChangePasswordRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\UpdateProfileRequest;
@@ -145,6 +147,20 @@ class AuthController extends Controller
                 'profile' => new ProfileResource($profile),
             ],
             message: 'Profile updated successfully.'
+        );
+    }
+
+    public function changePassword(
+        ChangePasswordRequest $request,
+        ChangeUserPassword $changeUserPassword
+    ) {
+        $changeUserPassword->execute(
+            $request->user(),
+            $request->string('password')->toString()
+        );
+
+        return ApiResponse::success(
+            message: 'Password changed successfully.'
         );
     }
 }
