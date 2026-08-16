@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AcademicYearController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +61,11 @@ Route::prefix('v1')->group(function () {
     Route::get('/universities/{university}/faculties', [
         UniversityController::class,
         'faculties',
+    ]);
+
+    Route::get('/academic-years', [
+        AcademicYearController::class,
+        'index',
     ]);
 
     Route::get('/health', function () {
