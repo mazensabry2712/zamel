@@ -19,6 +19,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    // Auth::register
+
     public function register(
         RegisterRequest $request,
         RegisterUser $registerUser
@@ -43,6 +45,8 @@ class AuthController extends Controller
             status: 201
         );
     }
+
+    // Auth::login
 
     public function login(
         LoginRequest $request,
@@ -81,6 +85,8 @@ class AuthController extends Controller
         );
     }
 
+    // Auth::me
+
     public function me(Request $request)
     {
         $user = $request->user()->load('profile');
@@ -93,6 +99,8 @@ class AuthController extends Controller
         );
     }
 
+    // Auth::logout
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -101,6 +109,8 @@ class AuthController extends Controller
             message: 'Logout successful.'
         );
     }
+
+    // Auth::profile
 
     public function profile(Request $request)
     {
@@ -124,6 +134,7 @@ class AuthController extends Controller
         );
     }
 
+    // Auth::updateProfile
     public function updateProfile(
         UpdateProfileRequest $request,
         UpdateProfile $updateProfile
@@ -149,6 +160,8 @@ class AuthController extends Controller
             message: 'Profile updated successfully.'
         );
     }
+
+    // Auth::changePassword
 
     public function changePassword(
         ChangePasswordRequest $request,
