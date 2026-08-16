@@ -52,6 +52,16 @@ Route::prefix('v1')->group(function () {
         'index',
     ]);
 
+    Route::get('/universities/{university}', [
+        UniversityController::class,
+        'show',
+    ]);
+
+    Route::get('/universities/{university}/faculties', [
+        UniversityController::class,
+        'faculties',
+    ]);
+
     Route::get('/health', function () {
         return response()->json([
             'success' => true,
