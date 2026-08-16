@@ -44,11 +44,17 @@ Route::prefix('v1')->group(function () {
                 AuthController::class,
                 'logout',
             ]);
-        });
-        Route::get('/profile', [
+
+
+  Route::get('/profile', [
             AuthController::class,
             'profile',
         ]);
+
+        });
+
+
+
     });
 
 

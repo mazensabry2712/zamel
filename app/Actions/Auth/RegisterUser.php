@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterUser
 {
+
     /**
      * Create a new class instance.
      */
@@ -28,12 +29,6 @@ class RegisterUser
 
         ]);
 
-        // $user->profile()->create([
-        //     'university_id' => $data['university_id'],
-        //     'faculty_id' => $data['faculty_id'],
-        //     'academic_year_id' => $data['academic_year_id'],
-        // ]);
-
-        // return $user;
+       
     }
 }
