@@ -194,6 +194,11 @@ Route::prefix('v1')->group(function () {
         'show',
     ]);
 
+    Route::get('/listings', [
+        ListingController::class,
+        'index',
+    ]);
+
     Route::get('/health', function () {
         return response()->json([
             'success' => true,

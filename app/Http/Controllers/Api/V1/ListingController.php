@@ -19,6 +19,23 @@ use Illuminate\Support\Facades\Gate;
 
 class ListingController extends Controller
 {
+    public function index()
+    {
+        $listings = Listing::query()
+            ->with('category')
+            ->where('status', 'published')
+            ->where('moderation_status', 'approved')
+            ->whereHas('category', function ($query) {
+                $query
+                    ->where('status', 'approved')
+                    ->where('is_active', true);
+            })
+            ->latest()
+            ->paginate(15);
+
+        return ListingResource::collection($listings);
+    }
+
     public function store(
         StoreListingRequest $request,
         CreateListing $createListing
