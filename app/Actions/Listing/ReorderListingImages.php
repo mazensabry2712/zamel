@@ -29,6 +29,9 @@ class ReorderListingImages
             $mediaItem->save();
         }
 
+        $listing->resetForModerationReview();
+        $listing->save();
+
         return $listing->getMedia('images')
             ->sortBy('order_column')
             ->values()
