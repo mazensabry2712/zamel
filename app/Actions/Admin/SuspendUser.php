@@ -19,6 +19,8 @@ class SuspendUser
             'moderated_at' => now(),
         ]);
 
+        $user->tokens()->delete();
+
         return $user->refresh();
     }
 }
