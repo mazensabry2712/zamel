@@ -76,6 +76,21 @@ Route::prefix('v1')->group(function () {
             ListingController::class,
             'destroy',
         ]);
+
+        Route::post('/listings/{listing}/publish', [
+            ListingController::class,
+            'publish',
+        ]);
+
+        Route::post('/listings/{listing}/pause', [
+            ListingController::class,
+            'pause',
+        ]);
+
+        Route::post('/listings/{listing}/sold', [
+            ListingController::class,
+            'sold',
+        ]);
     });
 
     Route::prefix('admin')
