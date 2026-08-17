@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Admin\CategoryModerationController;
 use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ListingController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,6 +51,11 @@ Route::prefix('v1')->group(function () {
             Route::put('/change-password', [
                 AuthController::class,
                 'changePassword',
+            ]);
+
+            Route::post('/listings', [
+                ListingController::class,
+                'store',
             ]);
         });
     });
