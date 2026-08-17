@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Listing\CreateListing;
 use App\Actions\Listing\DeleteListing;
+use App\Actions\Listing\MarkListingAsSold;
+use App\Actions\Listing\PauseListing;
+use App\Actions\Listing\PublishListing;
 use App\Actions\Listing\UpdateListing;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreListingRequest;
@@ -76,5 +79,38 @@ class ListingController extends Controller
             data: null,
             message: 'Listing deleted successfully.',
         );
+    }
+
+    public function publish(
+        Listing $listing,
+        PublishListing $publishListing
+    ): ListingResource {
+        Gate::authorize('publish', $listing);
+
+        $listing = $publishListing->execute($listing);
+
+        return new ListingResource($listing->load('category'));
+    }
+
+    public function pause(
+        Listing $listing,
+        PauseListing $pauseListing
+    ): ListingResource {
+        Gate::authorize('pause', $listing);
+
+        $listing = $pauseListing->execute($listing);
+
+        return new ListingResource($listing->load('category'));
+    }
+
+    public function sold(
+        Listing $listing,
+        MarkListingAsSold $markListingAsSold
+    ): ListingResource {
+        Gate::authorize('markAsSold', $listing);
+
+        $listing = $markListingAsSold->execute($listing);
+
+        return new ListingResource($listing->load('category'));
     }
 }
