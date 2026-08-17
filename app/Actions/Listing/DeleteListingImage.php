@@ -3,7 +3,7 @@
 namespace App\Actions\Listing;
 
 use App\Models\Listing;
-use Illuminate\Authorization\AuthorizationException;
+use Illuminate\Auth\Access\AuthorizationException;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DeleteListingImage
