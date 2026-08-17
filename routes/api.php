@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AcademicYearController;
+use App\Http\Controllers\Api\V1\Admin\CategoryModerationController;
+use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 
 Route::prefix('v1')->group(function () {
 
@@ -53,50 +54,55 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-
-
-// Admin
-
-Route::prefix('admin')
-    ->middleware([
+    // Category suggestions require an authenticated active user.
+    Route::middleware([
         'auth:sanctum',
         'active',
-        'can:admin',
-    ])
-    ->group(function () {
-
-        Route::prefix('users/{user}')->group(function () {
-
-    Route::put('/suspend', [
-        UserModerationController::class,
-        'suspend',
-    ]);
-
-    Route::put('/ban', [
-        UserModerationController::class,
-        'ban',
-    ]);
-
-    Route::put('/unban', [
-        UserModerationController::class,
-        'unban',
-    ]);
-});
+    ])->group(function () {
+        Route::post('/categories', [
+            CategoryController::class,
+            'store',
+        ]);
     });
 
-/////////////
+    // Admin moderation.
+    Route::prefix('admin')
+        ->middleware([
+            'auth:sanctum',
+            'active',
+            'can:admin',
+        ])
+        ->group(function () {
 
+            Route::prefix('users/{user}')->group(function () {
+                Route::put('/suspend', [
+                    UserModerationController::class,
+                    'suspend',
+                ]);
 
+                Route::put('/ban', [
+                    UserModerationController::class,
+                    'ban',
+                ]);
 
+                Route::put('/unban', [
+                    UserModerationController::class,
+                    'unban',
+                ]);
+            });
 
+            Route::prefix('categories/{category}')->group(function () {
+                Route::put('/approve', [
+                    CategoryModerationController::class,
+                    'approve',
+                ]);
 
-
-
-
-
-
-
-
+                Route::put('/reject', [
+                    CategoryModerationController::class,
+                    'reject',
+                ]);
+            });
+        });
 
     // University Context
     Route::get('/universities', [
@@ -119,7 +125,7 @@ Route::prefix('admin')
         'index',
     ]);
 
-    // Category
+    // Categories
     Route::get('/categories', [
         CategoryController::class,
         'index',
@@ -130,7 +136,6 @@ Route::prefix('admin')
         'show',
     ]);
 
-    // Test Api Health
     Route::get('/health', function () {
         return response()->json([
             'success' => true,
