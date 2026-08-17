@@ -71,6 +71,11 @@ Route::prefix('v1')->group(function () {
             ListingController::class,
             'update',
         ]);
+
+        Route::delete('/listings/{listing}', [
+            ListingController::class,
+            'destroy',
+        ]);
     });
 
     Route::prefix('admin')
