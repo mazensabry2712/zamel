@@ -41,7 +41,7 @@ it('lists only publicly visible approved listings', function () {
         'moderation_status' => 'approved',
     ]);
 
-    $this->getJson('/api/v1/listings')
+    $response = $this->getJson('/api/v1/listings')
         ->assertOk()
         ->assertJsonPath('data.0.id', $visible->id)
         ->assertJsonPath('data.0.title', 'Visible Listing')
@@ -51,7 +51,7 @@ it('lists only publicly visible approved listings', function () {
             'meta',
         ]);
 
-    $this->assertJsonCount(1, 'data');
+    expect($response->json('data'))->toHaveCount(1);
 });
 
 it('hides listings whose category is no longer publicly available', function () {
@@ -64,9 +64,10 @@ it('hides listings whose category is no longer publicly available', function () 
         'category_id' => $category->id,
     ]);
 
-    $this->getJson('/api/v1/listings')
-        ->assertOk()
-        ->assertJsonCount(0, 'data');
+    $response = $this->getJson('/api/v1/listings')
+        ->assertOk();
+
+    expect($response->json('data'))->toHaveCount(0);
 });
 
 it('paginates the public listing feed', function () {
@@ -75,11 +76,12 @@ it('paginates the public listing feed', function () {
         ->count(16)
         ->create();
 
-    $this->getJson('/api/v1/listings')
+    $response = $this->getJson('/api/v1/listings')
         ->assertOk()
-        ->assertJsonCount(15, 'data')
         ->assertJsonPath('meta.per_page', 15)
         ->assertJsonPath('meta.current_page', 1)
         ->assertJsonPath('meta.total', 16)
         ->assertJsonPath('meta.last_page', 2);
+
+    expect($response->json('data'))->toHaveCount(15);
 });
