@@ -17,6 +17,8 @@ class BanUser
             'moderated_at' => now(),
         ]);
 
+        $user->tokens()->delete();
+
         return $user->refresh();
     }
 }
