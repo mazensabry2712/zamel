@@ -14,6 +14,9 @@ class Listing extends Model
         'price',
         'condition',
         'status',
+        'moderation_status',
+        'moderation_reason',
+        'moderated_at',
         'published_at',
     ];
 
@@ -22,6 +25,7 @@ class Listing extends Model
         return [
             'price' => 'decimal:2',
             'published_at' => 'datetime',
+            'moderated_at' => 'datetime',
         ];
     }
 
