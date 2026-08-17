@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Listing;
+
 class Category extends Model
 {
     protected $fillable = [
@@ -13,11 +13,22 @@ class Category extends Model
         'seo_title',
         'seo_description',
         'is_active',
+        'status',
+        'created_by',
+        'moderation_reason',
     ];
+
     protected $casts = [
         'is_active' => 'boolean',
     ];
-    public function listings(){
+
+    public function listings()
+    {
         return $this->hasMany(Listing::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
