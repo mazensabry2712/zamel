@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Image\Enums\Fit;
 
 class Listing extends Model implements HasMedia
 {
@@ -69,5 +69,17 @@ class Listing extends Model implements HasMedia
             ->fit(Fit::Contain, 1200, 1200)
             ->quality(90)
             ->nonQueued();
+    }
+
+    public function resetForModerationReview(): void
+    {
+        $this->moderation_status = 'pending';
+        $this->moderation_reason = null;
+        $this->moderated_at = null;
+
+        if ($this->status === 'published') {
+            $this->status = 'draft';
+            $this->published_at = null;
+        }
     }
 }
