@@ -25,6 +25,22 @@ class LoginUser
             ]);
         }
 
+        if ($user->status === 'banned') {
+            throw ValidationException::withMessages([
+                'email' => [
+                    'Your account has been banned.',
+                ],
+            ]);
+        }
+
+        if ($user->status === 'suspended') {
+            throw ValidationException::withMessages([
+                'email' => [
+                    'Your account is temporarily suspended.',
+                ],
+            ]);
+        }
+
         return $user;
     }
 }
