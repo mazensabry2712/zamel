@@ -66,6 +66,11 @@ Route::prefix('v1')->group(function () {
             ListingController::class,
             'store',
         ]);
+
+        Route::put('/listings/{listing}', [
+            ListingController::class,
+            'update',
+        ]);
     });
 
     Route::prefix('admin')
