@@ -7,14 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class CategoryResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
-        // return parent::toArray($request);
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -24,6 +18,7 @@ class CategoryResource extends JsonResource
                 'title' => $this->seo_title,
                 'description' => $this->seo_description,
             ],
+            'status' => $this->status,
             'is_active' => $this->is_active,
         ];
     }
