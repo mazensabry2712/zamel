@@ -135,6 +135,11 @@ Route::prefix('v1')->group(function () {
         'show',
     ]);
 
+    Route::get('/listings/{listing}', [
+        ListingController::class,
+        'show',
+    ]);
+
     Route::get('/health', function () {
         return response()->json([
             'success' => true,
