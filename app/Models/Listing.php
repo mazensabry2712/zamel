@@ -4,14 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Image\Enums\Fit;
 
-class Listing extends Model
-// class Listing extends Model implements HasMedia
+class Listing extends Model implements HasMedia
 {
-    use HasFactory  HasMedia;
+    use HasFactory;
+    use InteractsWithMedia;
 
     protected $fillable = [
         'user_id',
@@ -44,5 +45,29 @@ class Listing extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')
+            ->useDisk('public')
+            ->acceptsMimeTypes([
+                'image/jpeg',
+                'image/png',
+                'image/webp',
+            ]);
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->fit(Fit::Crop, 400, 400)
+            ->quality(85)
+            ->nonQueued();
+
+        $this->addMediaConversion('medium')
+            ->fit(Fit::Contain, 1200, 1200)
+            ->quality(90)
+            ->nonQueued();
     }
 }
