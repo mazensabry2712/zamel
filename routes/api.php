@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AcademicYearController;
 use App\Http\Controllers\Api\V1\Admin\CategoryModerationController;
+use App\Http\Controllers\Api\V1\Admin\ListingModerationController;
 use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
@@ -127,6 +128,18 @@ Route::prefix('v1')->group(function () {
                     CategoryModerationController::class,
                     'reject',
                 ]);
+
+                Route::prefix('listings/{listing}')->group(function () {
+                    Route::put('/approve', [
+                        ListingModerationController::class,
+                        'approve',
+                    ]);
+
+                    Route::put('/reject', [
+                        ListingModerationController::class,
+                        'reject',
+                    ]);
+                });
             });
         });
 
