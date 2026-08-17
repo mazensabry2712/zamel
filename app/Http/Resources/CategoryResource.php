@@ -20,6 +20,8 @@ class CategoryResource extends JsonResource
             ],
             'status' => $this->status,
             'is_active' => $this->is_active,
+            'created_by' => $this->created_by,
+            'moderation_reason' => $this->moderation_reason,
         ];
     }
 }
