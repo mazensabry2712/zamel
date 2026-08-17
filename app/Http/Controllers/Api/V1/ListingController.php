@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Listing\CreateListing;
+use App\Actions\Listing\DeleteListing;
 use App\Actions\Listing\UpdateListing;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreListingRequest;
@@ -61,5 +62,19 @@ class ListingController extends Controller
         );
 
         return new ListingResource($listing->load('category'));
+    }
+
+    public function destroy(
+        Listing $listing,
+        DeleteListing $deleteListing
+    ): JsonResponse {
+        Gate::authorize('delete', $listing);
+
+        $deleteListing->execute($listing);
+
+        return ApiResponse::success(
+            data: null,
+            message: 'Listing deleted successfully.',
+        );
     }
 }
