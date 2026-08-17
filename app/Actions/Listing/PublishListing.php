@@ -2,17 +2,6 @@
 
 namespace App\Actions\Listing;
 
-class PublishListing
-{
-    /**
-     * Create a new class instance.
-     */
-    public function __construct()
-    {
-        //<?php
-
-namespace App\Actions\Listing;
-
 use App\Models\Listing;
 use Illuminate\Validation\ValidationException;
 
@@ -38,11 +27,9 @@ class PublishListing
 
         $listing->update([
             'status' => 'published',
-            'published_at' => now(),
+            'published_at' => $listing->published_at ?? now(),
         ]);
 
         return $listing->refresh();
-    }
-}
     }
 }
