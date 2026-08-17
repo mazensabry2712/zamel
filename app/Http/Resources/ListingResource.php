@@ -26,6 +26,9 @@ class ListingResource extends JsonResource
                 'name' => $this->category->name,
                 'slug' => $this->category->slug,
             ],
+            'images' => MediaResource::collection(
+                $this->getMedia('images')
+            ),
             'created_at' => $this->created_at,
         ];
     }
