@@ -3,8 +3,8 @@
 use App\Models\Listing;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
@@ -47,6 +47,35 @@ it('allows the owner to upload an image to their listing', function () {
         ]);
 
     expect($listing->getMedia('images'))->toHaveCount(1);
+});
+
+it('requires a fresh moderation review when an image is added to a published listing', function () {
+    $owner = User::factory()->create([
+        'status' => 'active',
+        'role' => 'student',
+    ]);
+
+    $listing = Listing::factory()->create([
+        'user_id' => $owner->id,
+        'status' => 'published',
+        'moderation_status' => 'approved',
+        'moderation_reason' => null,
+        'moderated_at' => now(),
+    ]);
+
+    Sanctum::actingAs($owner);
+
+    $this->post('/api/v1/listings/'.$listing->id.'/images', [
+        'image' => UploadedFile::fake()->image('new-book.jpg'),
+    ])->assertOk();
+
+    $listing->refresh();
+
+    expect($listing->status)->toBe('draft');
+    expect($listing->moderation_status)->toBe('pending');
+    expect($listing->moderation_reason)->toBeNull();
+    expect($listing->moderated_at)->toBeNull();
+    expect($listing->published_at)->toBeNull();
 });
 
 it('prevents another user from uploading an image', function () {
@@ -136,6 +165,38 @@ it('allows the owner to delete one of their listing images', function () {
     )->assertOk();
 
     expect($listing->fresh()->getMedia('images'))->toHaveCount(0);
+});
+
+it('requires a fresh moderation review when an image is deleted from a published listing', function () {
+    $owner = User::factory()->create([
+        'status' => 'active',
+        'role' => 'student',
+    ]);
+
+    $listing = Listing::factory()->create([
+        'user_id' => $owner->id,
+        'status' => 'published',
+        'moderation_status' => 'approved',
+        'moderation_reason' => null,
+        'moderated_at' => now(),
+    ]);
+
+    $media = $listing
+        ->addMedia(UploadedFile::fake()->image('book.jpg'))
+        ->toMediaCollection('images');
+
+    Sanctum::actingAs($owner);
+
+    $this->deleteJson(
+        "/api/v1/listings/{$listing->id}/images/{$media->id}"
+    )->assertOk();
+
+    $listing->refresh();
+
+    expect($listing->status)->toBe('draft');
+    expect($listing->moderation_status)->toBe('pending');
+    expect($listing->moderated_at)->toBeNull();
+    expect($listing->published_at)->toBeNull();
 });
 
 it('prevents deleting an image belonging to another listing', function () {
