@@ -34,22 +34,10 @@ class CreateListing
             'description' => $data['description'] ?? null,
             'price' => $data['price'],
             'condition' => $data['condition'],
-<<<<<<< HEAD
-
-            // Listing lifecycle
-            'status' => 'draft',
-
-            // Admin moderation
-            'moderation_status' => 'pending',
-            'moderation_reason' => null,
-            'moderated_at' => null,
-
-=======
             'status' => 'draft',
             'moderation_status' => 'pending',
             'moderation_reason' => null,
             'moderated_at' => null,
->>>>>>> 727ce3476766672efa698dc1fb932329ee4f553b
             'published_at' => null,
         ]);
     }
