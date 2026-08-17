@@ -191,3 +191,56 @@ it('hides pending categories from public category listing', function () {
             'name' => 'Pending Category',
         ]);
 });
+
+it('cannot approve an already approved category', function () {
+    $admin = User::factory()->create([
+        'role' => 'admin',
+        'status' => 'active',
+    ]);
+
+    $category = Category::factory()->create([
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    Sanctum::actingAs($admin);
+
+    $response = $this->putJson(
+        "/api/v1/admin/categories/{$category->id}/approve"
+    );
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['status']);
+
+    expect($category->fresh()->status)->toBe('approved');
+});
+
+it('cannot reject an already rejected category', function () {
+    $admin = User::factory()->create([
+        'role' => 'admin',
+        'status' => 'active',
+    ]);
+
+    $category = Category::factory()->create([
+        'status' => 'rejected',
+        'is_active' => false,
+        'moderation_reason' => 'Duplicate category',
+    ]);
+
+    Sanctum::actingAs($admin);
+
+    $response = $this->putJson(
+        "/api/v1/admin/categories/{$category->id}/reject",
+        [
+            'reason' => 'Still duplicate',
+        ]
+    );
+
+    $response
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['status']);
+
+    expect($category->fresh()->status)->toBe('rejected');
+    expect($category->fresh()->moderation_reason)->toBe('Duplicate category');
+});
