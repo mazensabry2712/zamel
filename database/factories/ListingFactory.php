@@ -17,11 +17,11 @@ class ListingFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory()->create([
+            'user_id' => User::factory()->state([
                 'status' => 'active',
                 'role' => 'student',
-            ])->id,
-            'category_id' => Category::factory()->create()->id,
+            ]),
+            'category_id' => Category::factory(),
             'title' => fake()->sentence(3),
             'description' => fake()->paragraph(),
             'price' => fake()->randomFloat(2, 50, 1000),
