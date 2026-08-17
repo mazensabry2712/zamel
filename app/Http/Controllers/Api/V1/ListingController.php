@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Listing\CreateListing;
+use App\Actions\Listing\UpdateListing;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreListingRequest;
+use App\Http\Requests\UpdateListingRequest;
 use App\Http\Resources\ListingResource;
 use App\Models\Listing;
 use App\Support\ApiResponse;
@@ -43,5 +45,20 @@ class ListingController extends Controller
             ->firstOrFail();
 
         return new ListingResource($listing);
+    }
+
+    public function update(
+        UpdateListingRequest $request,
+        Listing $listing,
+        UpdateListing $updateListing
+    ): ListingResource {
+        $this->authorize('update', $listing);
+
+        $listing = $updateListing->execute(
+            listing: $listing,
+            data: $request->validated(),
+        );
+
+        return new ListingResource($listing->load('category'));
     }
 }
