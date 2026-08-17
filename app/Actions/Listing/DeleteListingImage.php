@@ -13,6 +13,9 @@ class DeleteListingImage
         $this->ensureBelongsToListing($listing, $media);
 
         $media->delete();
+
+        $listing->resetForModerationReview();
+        $listing->save();
     }
 
     private function ensureBelongsToListing(Listing $listing, Media $media): void
