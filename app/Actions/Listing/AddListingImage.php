@@ -21,6 +21,9 @@ class AddListingImage
             ]);
         }
 
+        $listing->resetForModerationReview();
+        $listing->save();
+
         return $listing
             ->addMedia($image)
             ->toMediaCollection('images');
