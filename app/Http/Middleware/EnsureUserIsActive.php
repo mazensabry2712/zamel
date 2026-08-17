@@ -39,4 +39,4 @@ class EnsureUserIsActive
 
         return $next($request);
     }
-}bootstrap/app.php
+}
