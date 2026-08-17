@@ -11,6 +11,7 @@ use App\Http\Resources\ListingResource;
 use App\Models\Listing;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Gate;
 
 class ListingController extends Controller
 {
@@ -52,7 +53,7 @@ class ListingController extends Controller
         Listing $listing,
         UpdateListing $updateListing
     ): ListingResource {
-        $this->authorize('update', $listing);
+        Gate::authorize('update', $listing);
 
         $listing = $updateListing->execute(
             listing: $listing,
