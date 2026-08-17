@@ -189,7 +189,7 @@ it('requires a fresh moderation review when an image is deleted from a published
 
     $this->deleteJson(
         "/api/v1/listings/{$listing->id}/images/{$media->id}"
-    )->assertOk();
+    )->assertCreated();
 
     $listing->refresh();
 
@@ -260,7 +260,7 @@ it('allows the owner to reorder listing images', function () {
         ],
     );
 
-    $response->assertOk();
+    $response->assertCreated();
 
     $orderedIds = $listing->fresh()
         ->getMedia('images')
