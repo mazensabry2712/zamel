@@ -30,7 +30,7 @@ it('allows the owner to upload an image to their listing', function () {
     ]);
 
     $response
-        ->assertOk()
+        ->assertCreated()
         ->assertJsonPath('data.file_name', 'book.jpg')
         ->assertJsonStructure([
             'data' => [
@@ -67,7 +67,7 @@ it('requires a fresh moderation review when an image is added to a published lis
 
     $this->post('/api/v1/listings/'.$listing->id.'/images', [
         'image' => UploadedFile::fake()->image('new-book.jpg'),
-    ])->assertOk();
+    ])->assertCreated();
 
     $listing->refresh();
 
@@ -189,7 +189,7 @@ it('requires a fresh moderation review when an image is deleted from a published
 
     $this->deleteJson(
         "/api/v1/listings/{$listing->id}/images/{$media->id}"
-    )->assertCreated();
+    )->assertOk();
 
     $listing->refresh();
 
@@ -260,7 +260,7 @@ it('allows the owner to reorder listing images', function () {
         ],
     );
 
-    $response->assertCreated();
+    $response->assertOk();
 
     $orderedIds = $listing->fresh()
         ->getMedia('images')
