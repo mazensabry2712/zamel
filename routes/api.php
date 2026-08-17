@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('v1')->group(function () {
 
     Route::prefix('auth')->group(function () {
-
         Route::post('/register', [
             AuthController::class,
             'register',
@@ -27,7 +26,6 @@ Route::prefix('v1')->group(function () {
             'auth:sanctum',
             'active',
         ])->group(function () {
-
             Route::get('/me', [
                 AuthController::class,
                 'me',
@@ -51,11 +49,6 @@ Route::prefix('v1')->group(function () {
             Route::put('/change-password', [
                 AuthController::class,
                 'changePassword',
-            ]);
-
-            Route::post('/listings', [
-                ListingController::class,
-                'store',
             ]);
         });
     });
@@ -82,7 +75,6 @@ Route::prefix('v1')->group(function () {
             'can:admin',
         ])
         ->group(function () {
-
             Route::prefix('users/{user}')->group(function () {
                 Route::put('/suspend', [
                     UserModerationController::class,
