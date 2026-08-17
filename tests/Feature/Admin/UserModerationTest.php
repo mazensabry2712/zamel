@@ -72,6 +72,7 @@ it('allows an admin to suspend a user', function () {
     expect($target->suspended_until)
         ->not->toBeNull();
 });
+
 it('requires a reason when suspending a user', function () {
     $admin = User::factory()->create([
         'role' => 'admin',
@@ -97,6 +98,7 @@ it('requires a reason when suspending a user', function () {
             'reason',
         ]);
 });
+
 it('requires a future suspension date', function () {
     $admin = User::factory()->create([
         'role' => 'admin',
@@ -113,7 +115,7 @@ it('requires a future suspension date', function () {
             'suspended_until' => now()
                 ->subDay()
                 ->toISOString(),
-            'reason' => 'Spam',
+            'reason' => 'Spam reason',
         ]
     );
 
@@ -123,6 +125,7 @@ it('requires a future suspension date', function () {
             'suspended_until',
         ]);
 });
+
 it('allows an admin to ban a user', function () {
     $admin = User::factory()->create([
         'role' => 'admin',
@@ -153,6 +156,7 @@ it('allows an admin to ban a user', function () {
     expect($target->fresh()->moderation_reason)
         ->toBe('Prohibited content');
 });
+
 it('requires a reason when banning a user', function () {
     $admin = User::factory()->create([
         'role' => 'admin',
@@ -208,6 +212,7 @@ it('allows an admin to unban a user', function () {
     expect($target->suspended_until)
         ->toBeNull();
 });
+
 it('prevents suspended users from logging in', function () {
     $user = User::factory()->create([
         'email' => 'suspended@example.com',
@@ -228,6 +233,7 @@ it('prevents suspended users from logging in', function () {
             'email',
         ]);
 });
+
 it('prevents banned users from logging in', function () {
     $user = User::factory()->create([
         'email' => 'banned@example.com',
@@ -247,6 +253,7 @@ it('prevents banned users from logging in', function () {
             'email',
         ]);
 });
+
 it('revokes existing tokens when a user is banned', function () {
     $admin = User::factory()->create([
         'role' => 'admin',
@@ -258,7 +265,7 @@ it('revokes existing tokens when a user is banned', function () {
         'status' => 'active',
     ]);
 
-    $targetToken = $target->createToken('test-token')->plainTextToken;
+    $target->createToken('test-token')->plainTextToken;
 
     expect($target->tokens()->count())
         ->toBe(1);
@@ -300,7 +307,7 @@ it('revokes existing tokens when a user is suspended', function () {
             'suspended_until' => now()
                 ->addDays(3)
                 ->toISOString(),
-            'reason' => 'Spam',
+            'reason' => 'Spam posting',
         ]
     );
 
@@ -309,6 +316,7 @@ it('revokes existing tokens when a user is suspended', function () {
     expect($target->fresh()->tokens()->count())
         ->toBe(0);
 });
+
 it('blocks a suspended user from protected endpoints', function () {
     $user = User::factory()->create([
         'status' => 'suspended',
@@ -328,6 +336,7 @@ it('blocks a suspended user from protected endpoints', function () {
             'message' => 'Your account is temporarily suspended.',
         ]);
 });
+
 it('blocks a banned user from protected endpoints', function () {
     $user = User::factory()->create([
         'status' => 'banned',
