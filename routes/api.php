@@ -128,18 +128,18 @@ Route::prefix('v1')->group(function () {
                     CategoryModerationController::class,
                     'reject',
                 ]);
+            });
 
-                Route::prefix('listings/{listing}')->group(function () {
-                    Route::put('/approve', [
-                        ListingModerationController::class,
-                        'approve',
-                    ]);
+            Route::prefix('listings/{listing}')->group(function () {
+                Route::put('/approve', [
+                    ListingModerationController::class,
+                    'approve',
+                ]);
 
-                    Route::put('/reject', [
-                        ListingModerationController::class,
-                        'reject',
-                    ]);
-                });
+                Route::put('/reject', [
+                    ListingModerationController::class,
+                    'reject',
+                ]);
             });
         });
 
