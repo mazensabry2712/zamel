@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Admin\CategoryModerationController;
 use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\ListingController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
 
@@ -54,7 +55,6 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // Category suggestions require an authenticated active user.
     Route::middleware([
         'auth:sanctum',
         'active',
@@ -63,9 +63,13 @@ Route::prefix('v1')->group(function () {
             CategoryController::class,
             'store',
         ]);
+
+        Route::post('/listings', [
+            ListingController::class,
+            'store',
+        ]);
     });
 
-    // Admin moderation.
     Route::prefix('admin')
         ->middleware([
             'auth:sanctum',
@@ -104,7 +108,6 @@ Route::prefix('v1')->group(function () {
             });
         });
 
-    // University Context
     Route::get('/universities', [
         UniversityController::class,
         'index',
@@ -125,7 +128,6 @@ Route::prefix('v1')->group(function () {
         'index',
     ]);
 
-    // Categories
     Route::get('/categories', [
         CategoryController::class,
         'index',
