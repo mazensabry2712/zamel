@@ -20,11 +20,11 @@ Route::prefix('v1')->group(function () {
             'login',
         ]);
 
-        // Route::middleware('auth:sanctum')->group(function () {
         Route::middleware([
             'auth:sanctum',
             'active',
-        ])->group(function () {
+            'can:admin',
+        ])->prefix('admin')->group(function () {
 
             Route::get('/me', [
                 AuthController::class,
