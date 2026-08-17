@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ListingController;
+use App\Http\Controllers\Api\V1\ListingMediaController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +92,21 @@ Route::prefix('v1')->group(function () {
         Route::post('/listings/{listing}/sold', [
             ListingController::class,
             'sold',
+        ]);
+
+        Route::post('/listings/{listing}/images', [
+            ListingMediaController::class,
+            'store',
+        ]);
+
+        Route::delete('/listings/{listing}/images/{media}', [
+            ListingMediaController::class,
+            'destroy',
+        ]);
+
+        Route::put('/listings/{listing}/images/reorder', [
+            ListingMediaController::class,
+            'reorder',
         ]);
     });
 
