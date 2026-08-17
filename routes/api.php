@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 
 Route::prefix('v1')->group(function () {
 
@@ -23,8 +24,7 @@ Route::prefix('v1')->group(function () {
         Route::middleware([
             'auth:sanctum',
             'active',
-            'can:admin',
-        ])->prefix('admin')->group(function () {
+        ])->group(function () {
 
             Route::get('/me', [
                 AuthController::class,
@@ -52,6 +52,52 @@ Route::prefix('v1')->group(function () {
             ]);
         });
     });
+
+
+
+// Admin
+
+Route::prefix('admin')
+    ->middleware([
+        'auth:sanctum',
+        'active',
+        'can:admin',
+    ])
+    ->group(function () {
+
+        Route::prefix('users/{user}')->group(function () {
+
+    Route::put('/suspend', [
+        UserModerationController::class,
+        'suspend',
+    ]);
+
+    Route::put('/ban', [
+        UserModerationController::class,
+        'ban',
+    ]);
+
+    Route::put('/unban', [
+        UserModerationController::class,
+        'unban',
+    ]);
+});
+    });
+
+/////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
     // University Context
     Route::get('/universities', [
         UniversityController::class,
