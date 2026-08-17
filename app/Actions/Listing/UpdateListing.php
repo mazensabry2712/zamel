@@ -27,18 +27,7 @@ class UpdateListing
         }
 
         $listing->fill($data);
-
-        // Any content change requires a fresh moderation review.
-        $listing->moderation_status = 'pending';
-        $listing->moderation_reason = null;
-        $listing->moderated_at = null;
-
-        // A published listing must not remain publicly visible while being re-reviewed.
-        if ($listing->status === 'published') {
-            $listing->status = 'draft';
-            $listing->published_at = null;
-        }
-
+        $listing->resetForModerationReview();
         $listing->save();
 
         return $listing->refresh();
