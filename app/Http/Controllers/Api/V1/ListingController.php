@@ -15,14 +15,12 @@ use App\Http\Resources\ListingResource;
 use App\Models\Listing;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ListingController extends Controller
 {
-
-
-public function index(Request $request)
+    public function index(Request $request)
     {
         $listings = Listing::query()
             ->with('category')
@@ -33,8 +31,18 @@ public function index(Request $request)
                     ->where('status', 'approved')
                     ->where('is_active', true);
             })
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = trim($request->input('search'));
+
+                $query->where(function ($query) use ($search) {
+                    $query
+                        ->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
             ->latest()
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return ListingResource::collection($listings);
     }
