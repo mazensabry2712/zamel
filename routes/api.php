@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\FavoriteController;
 use App\Http\Controllers\Api\V1\ListingController;
 use App\Http\Controllers\Api\V1\ListingMediaController;
+use App\Http\Controllers\Api\V1\MarketplaceRequestController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
 
@@ -122,6 +123,31 @@ Route::prefix('v1')->group(function () {
 
         Route::delete('/listings/{listing}/favorite', [
             FavoriteController::class,
+            'destroy',
+        ]);
+
+        Route::post('/requests', [
+            MarketplaceRequestController::class,
+            'store',
+        ]);
+
+        Route::get('/requests', [
+            MarketplaceRequestController::class,
+            'index',
+        ]);
+
+        Route::get('/requests/{marketplaceRequest}', [
+            MarketplaceRequestController::class,
+            'show',
+        ]);
+
+        Route::put('/requests/{marketplaceRequest}', [
+            MarketplaceRequestController::class,
+            'update',
+        ]);
+
+        Route::delete('/requests/{marketplaceRequest}', [
+            MarketplaceRequestController::class,
             'destroy',
         ]);
     });
