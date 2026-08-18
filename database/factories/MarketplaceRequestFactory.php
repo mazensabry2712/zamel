@@ -6,19 +6,12 @@ use App\Models\Category;
 use App\Models\MarketplaceRequest;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @extends Factory<MarketplaceRequest>
  */
 class MarketplaceRequestFactory extends Factory
 {
-    use HasFactory;
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
@@ -30,5 +23,35 @@ class MarketplaceRequestFactory extends Factory
             'status' => 'open',
             'expires_at' => now()->addWeek(),
         ];
+    }
+
+    public function open(): static
+    {
+        return $this->state([
+            'status' => 'open',
+            'expires_at' => now()->addWeek(),
+        ]);
+    }
+
+    public function fulfilled(): static
+    {
+        return $this->state([
+            'status' => 'fulfilled',
+        ]);
+    }
+
+    public function cancelled(): static
+    {
+        return $this->state([
+            'status' => 'cancelled',
+        ]);
+    }
+
+    public function expired(): static
+    {
+        return $this->state([
+            'status' => 'expired',
+            'expires_at' => now()->subDay(),
+        ]);
     }
 }
