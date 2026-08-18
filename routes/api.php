@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Admin\ListingModerationController;
 use App\Http\Controllers\Api\V1\Admin\UserModerationController;
 use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
+use App\Http\Controllers\Api\V1\FavoriteController;
 use App\Http\Controllers\Api\V1\ListingController;
 use App\Http\Controllers\Api\V1\ListingMediaController;
 use App\Http\Controllers\Api\V1\UniversityController;
@@ -107,6 +108,21 @@ Route::prefix('v1')->group(function () {
         Route::put('/listings/{listing}/images/reorder', [
             ListingMediaController::class,
             'reorder',
+        ]);
+
+        Route::get('/favorites', [
+            FavoriteController::class,
+            'index',
+        ]);
+
+        Route::post('/listings/{listing}/favorite', [
+            FavoriteController::class,
+            'store',
+        ]);
+
+        Route::delete('/listings/{listing}/favorite', [
+            FavoriteController::class,
+            'destroy',
         ]);
     });
 
