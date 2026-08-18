@@ -43,6 +43,11 @@ class ListingController extends Controller
             ->when($request->filled('category_id'), function ($query) use ($request) {
                 $query->where('category_id', $request->integer('category_id'));
             })
+            ->when($request->filled('university_id'), function ($query) use ($request) {
+                $query->whereHas('user.profile', function ($query) use ($request) {
+                    $query->where('university_id', $request->integer('university_id'));
+                });
+            })
             ->latest()
             ->paginate(15)
             ->withQueryString();
