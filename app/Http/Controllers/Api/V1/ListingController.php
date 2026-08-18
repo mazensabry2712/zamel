@@ -48,6 +48,12 @@ class ListingController extends Controller
                     $query->where('university_id', $request->integer('university_id'));
                 });
             })
+            ->when($request->filled('price_min'), function ($query) use ($request) {
+                $query->where('price', '>=', $request->input('price_min'));
+            })
+            ->when($request->filled('price_max'), function ($query) use ($request) {
+                $query->where('price', '<=', $request->input('price_max'));
+            })
             ->latest()
             ->paginate(15)
             ->withQueryString();
