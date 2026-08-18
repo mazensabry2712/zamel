@@ -22,7 +22,7 @@ class ListingController extends Controller
 {
     public function index(Request $request)
     {
-        $listings = Listing::query()
+        $query = Listing::query()
             ->with('category')
             ->where('status', 'published')
             ->where('moderation_status', 'approved')
@@ -54,7 +54,20 @@ class ListingController extends Controller
             ->when($request->filled('price_max'), function ($query) use ($request) {
                 $query->where('price', '<=', $request->input('price_max'));
             })
-            ->latest()
+            ->when($request->filled('condition'), function ($query) use ($request) {
+                $query->where('condition', $request->input('condition'));
+            });
+
+        $sort = $request->input('sort', 'newest');
+
+        match ($sort) {
+            'oldest' => $query->oldest(),
+            'price_asc' => $query->orderBy('price'),
+            'price_desc' => $query->orderByDesc('price'),
+            default => $query->latest(),
+        };
+
+        $listings = $query
             ->paginate(15)
             ->withQueryString();
 
