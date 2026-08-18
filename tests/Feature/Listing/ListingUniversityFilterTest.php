@@ -183,5 +183,5 @@ it('preserves the university filter during pagination', function () {
         ->assertJsonPath('meta.last_page', 2);
 
     expect($response->json('links.next'))
-        ->toContain('university_id=' . $university->id);
+        ->toContain('university_id='.$university->id);
 });
