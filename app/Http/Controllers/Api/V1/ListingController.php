@@ -16,10 +16,13 @@ use App\Models\Listing;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 
 class ListingController extends Controller
 {
-    public function index()
+
+
+public function index(Request $request)
     {
         $listings = Listing::query()
             ->with('category')
