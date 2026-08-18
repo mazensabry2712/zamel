@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\MarketplaceRequest\CreateMarketplaceRequest;
+use App\Actions\MarketplaceRequest\DeleteMarketplaceRequest;
 use App\Actions\MarketplaceRequest\UpdateMarketplaceRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMarketplaceRequest;
@@ -11,9 +12,8 @@ use App\Http\Resources\MarketplaceRequestResource;
 use App\Models\MarketplaceRequest;
 use App\Support\ApiResponse;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Gate;
 
 class MarketplaceRequestController extends Controller
 {
@@ -77,9 +77,16 @@ class MarketplaceRequestController extends Controller
     }
 
     public function destroy(
-        MarketplaceRequest $request,
-        MarketplaceRequestController $controller
+        MarketplaceRequest $marketplaceRequest,
+        DeleteMarketplaceRequest $deleteMarketplaceRequest
     ): JsonResponse {
-        return ApiResponse::success();
+        Gate::authorize('delete', $marketplaceRequest);
+
+        $deleteMarketplaceRequest->execute($marketplaceRequest);
+
+        return ApiResponse::success(
+            data: null,
+            message: 'Request deleted successfully.',
+        );
     }
 }
