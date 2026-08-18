@@ -47,6 +47,11 @@ class Listing extends Model implements HasMedia
         return $this->belongsTo(Category::class);
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images')
