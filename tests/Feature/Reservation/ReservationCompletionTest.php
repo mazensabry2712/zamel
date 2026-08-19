@@ -53,6 +53,11 @@ it('allows the reservation owner to complete a confirmed reservation', function 
         'status' => 'completed',
     ]);
 
+    $this->assertDatabaseHas('listings', [
+        'id' => $scenario['listing']->id,
+        'status' => 'sold',
+    ]);
+
     expect(Reservation::find($scenario['reservation']->id)->completed_at)->not->toBeNull();
 });
 
@@ -66,6 +71,11 @@ it('allows the listing owner to complete a confirmed reservation', function () {
     )
         ->assertOk()
         ->assertJsonPath('data.status', 'completed');
+
+    $this->assertDatabaseHas('listings', [
+        'id' => $scenario['listing']->id,
+        'status' => 'sold',
+    ]);
 });
 
 it('requires authentication to complete a reservation', function () {
