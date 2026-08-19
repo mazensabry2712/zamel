@@ -3,19 +3,19 @@
 use App\Models\AcademicYear;
 
 it('lists all academic years ordered by sort order', function () {
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'Third Year',
         'education_type' => 'university',
         'sort_order' => 3,
     ]);
 
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'First Year',
         'education_type' => 'university',
         'sort_order' => 1,
     ]);
 
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'Second Year',
         'education_type' => 'university',
         'sort_order' => 2,
@@ -32,19 +32,19 @@ it('lists all academic years ordered by sort order', function () {
 });
 
 it('filters academic years by education type', function () {
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'First University Year',
         'education_type' => 'university',
         'sort_order' => 1,
     ]);
 
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'First School Year',
         'education_type' => 'school',
         'sort_order' => 1,
     ]);
 
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'Second University Year',
         'education_type' => 'university',
         'sort_order' => 2,
@@ -70,7 +70,7 @@ it('returns an empty collection when no academic years exist', function () {
 });
 
 it('returns an empty collection when the education type has no academic years', function () {
-    AcademicYear::factory()->create([
+    AcademicYear::create([
         'name' => 'First University Year',
         'education_type' => 'university',
         'sort_order' => 1,
@@ -84,7 +84,17 @@ it('returns an empty collection when the education type has no academic years', 
 });
 
 it('does not require authentication to list academic years', function () {
-    AcademicYear::factory()->count(2)->create();
+    AcademicYear::create([
+        'name' => 'First Year',
+        'education_type' => 'university',
+        'sort_order' => 1,
+    ]);
+
+    AcademicYear::create([
+        'name' => 'Second Year',
+        'education_type' => 'university',
+        'sort_order' => 2,
+    ]);
 
     $this->getJson('/api/v1/academic-years')
         ->assertOk();
