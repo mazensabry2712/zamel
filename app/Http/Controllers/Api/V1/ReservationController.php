@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Reservation\CancelReservation;
+use App\Actions\Reservation\CompleteReservation;
 use App\Actions\Reservation\ConfirmReservation;
 use App\Actions\Reservation\CreateReservation;
 use App\Http\Controllers\Controller;
@@ -49,6 +50,20 @@ class ReservationController extends Controller
         CancelReservation $cancelReservation,
     ): ReservationResource {
         $reservation = $cancelReservation->execute(
+            user: request()->user(),
+            listing: $listing,
+            reservation: $reservation,
+        );
+
+        return new ReservationResource($reservation);
+    }
+
+    public function complete(
+        Listing $listing,
+        Reservation $reservation,
+        CompleteReservation $completeReservation,
+    ): ReservationResource {
+        $reservation = $completeReservation->execute(
             user: request()->user(),
             listing: $listing,
             reservation: $reservation,
