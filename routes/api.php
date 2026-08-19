@@ -161,6 +161,11 @@ Route::prefix('v1')->group(function () {
             OfferController::class,
             'accept',
         ]);
+
+        Route::post('/requests/{marketplaceRequest}/offers/{offer}/withdraw', [
+            OfferController::class,
+            'withdraw',
+        ]);
     });
 
     Route::prefix('admin')
