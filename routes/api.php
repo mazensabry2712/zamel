@@ -203,6 +203,11 @@ Route::prefix('v1')->group(function () {
             ReservationController::class,
             'cancel',
         ]);
+
+        Route::post('/listings/{listing}/reservation/{reservation}/complete', [
+            ReservationController::class,
+            'complete',
+        ]);
     });
 
     Route::prefix('admin')
