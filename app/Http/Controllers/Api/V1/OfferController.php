@@ -34,6 +34,23 @@ class OfferController extends Controller
         return OfferResource::collection($offers);
     }
 
+    public function show(MarketplaceRequest $marketplaceRequest, Offer $offer): OfferResource
+    {
+        abort_unless($offer->request_id === $marketplaceRequest->id, 404);
+
+        $user = request()->user();
+
+        abort_unless(
+            $marketplaceRequest->user_id === $user->id
+                || $offer->user_id === $user->id,
+            403
+        );
+
+        return new OfferResource(
+            $offer->load(['user', 'marketplaceRequest'])
+        );
+    }
+
     public function store(
         StoreOfferRequest $request,
         MarketplaceRequest $marketplaceRequest,
