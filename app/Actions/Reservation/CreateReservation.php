@@ -40,6 +40,11 @@ class CreateReservation
 
         $hasActiveReservation = $listing->reservations()
             ->whereIn('status', ['pending', 'confirmed'])
+            ->where(function ($query) {
+                $query
+                    ->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
             ->exists();
 
         if ($hasActiveReservation) {
