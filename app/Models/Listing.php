@@ -87,4 +87,9 @@ class Listing extends Model implements HasMedia
             $this->published_at = null;
         }
     }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
 }
