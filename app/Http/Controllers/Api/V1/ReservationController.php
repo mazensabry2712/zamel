@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Listing\MarkListingAsSold;
 use App\Actions\Reservation\CancelReservation;
 use App\Actions\Reservation\CompleteReservation;
 use App\Actions\Reservation\ConfirmReservation;
@@ -62,11 +63,13 @@ class ReservationController extends Controller
         Listing $listing,
         Reservation $reservation,
         CompleteReservation $completeReservation,
+        MarkListingAsSold $markListingAsSold,
     ): ReservationResource {
         $reservation = $completeReservation->execute(
             user: request()->user(),
             listing: $listing,
             reservation: $reservation,
+            markListingAsSold: $markListingAsSold,
         );
 
         return new ReservationResource($reservation);
