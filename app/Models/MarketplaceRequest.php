@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Offer;
 
 class MarketplaceRequest extends Model
 {
@@ -33,4 +34,8 @@ class MarketplaceRequest extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function offers()
+{
+    return $this->hasMany(Offer::class, 'request_id');
+}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Offer;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -50,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(MarketplaceRequest::class);
     }
+    public function offers()
+{
+    return $this->hasMany(Offer::class);
+}
+
 }

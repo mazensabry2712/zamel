@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Category;
 use App\Models\MarketplaceRequest;
+use App\Models\Offer;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -54,4 +55,9 @@ class MarketplaceRequestFactory extends Factory
             'expires_at' => now()->subDay(),
         ]);
     }
+
+    public function offers()
+{
+    return $this->hasMany(Offer::class, 'request_id');
+}
 }
