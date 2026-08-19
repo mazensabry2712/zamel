@@ -11,11 +11,29 @@ use App\Http\Requests\StoreOfferRequest;
 use App\Http\Resources\OfferResource;
 use App\Models\MarketplaceRequest;
 use App\Models\Offer;
-use App\Support\ApiResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Gate;
 
 class OfferController extends Controller
 {
+    public function index(Request $request, MarketplaceRequest $marketplaceRequest): AnonymousResourceCollection
+    {
+        Gate::authorize('viewOffers', $marketplaceRequest);
+
+        $offers = $marketplaceRequest->offers()
+            ->with('user')
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $query->where('status', $request->string('status')->toString());
+            })
+            ->latest()
+            ->paginate((int) $request->input('per_page', 15))
+            ->withQueryString();
+
+        return OfferResource::collection($offers);
+    }
+
     public function store(
         StoreOfferRequest $request,
         MarketplaceRequest $marketplaceRequest,
@@ -27,11 +45,11 @@ class OfferController extends Controller
             data: $request->validated(),
         );
 
-        return ApiResponse::success(
-            data: new OfferResource($offer),
-            message: 'Offer created successfully.',
-            status: 201,
-        );
+        return response()->json([
+            'success' => true,
+            'message' => 'Offer created successfully.',
+            'data' => new OfferResource($offer),
+        ], 201);
     }
 
     public function accept(
