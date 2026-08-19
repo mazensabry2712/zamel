@@ -193,6 +193,11 @@ Route::prefix('v1')->group(function () {
             ReservationController::class,
             'store',
         ]);
+
+        Route::post('/listings/{listing}/reservation/{reservation}/confirm', [
+            ReservationController::class,
+            'confirm',
+        ]);
     });
 
     Route::prefix('admin')
