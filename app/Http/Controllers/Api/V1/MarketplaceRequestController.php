@@ -95,7 +95,7 @@ class MarketplaceRequestController extends Controller
         MarketplaceRequest $marketplaceRequest,
         CancelMarketplaceRequest $cancelMarketplaceRequest,
     ): MarketplaceRequestResource {
-        Gate::authorize('update', $marketplaceRequest);
+        abort_unless($marketplaceRequest->user_id === request()->user()->id, 403);
 
         $marketplaceRequest = $cancelMarketplaceRequest->execute(
             marketplaceRequest: $marketplaceRequest,
