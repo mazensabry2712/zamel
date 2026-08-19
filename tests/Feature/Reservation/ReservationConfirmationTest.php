@@ -55,7 +55,7 @@ it('allows the listing owner to confirm a pending reservation', function () {
         ->assertOk()
         ->assertJsonPath('data.status', 'confirmed')
         ->assertJsonPath('data.listing_id', $scenario['listing']->id)
-        ->assertJsonPath('data.user_id', $scenario['buyer']->id');
+        ->assertJsonPath('data.user_id', $scenario['buyer']->id);
 
     $this->assertDatabaseHas('reservations', [
         'id' => $scenario['reservation']->id,
