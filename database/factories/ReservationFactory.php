@@ -1,4 +1,3 @@
-```php
 <?php
 
 namespace Database\Factories;
@@ -64,4 +63,3 @@ class ReservationFactory extends Factory
         ]);
     }
 }
-```
