@@ -152,6 +152,11 @@ Route::prefix('v1')->group(function () {
             'destroy',
         ]);
 
+        Route::post('/requests/{marketplaceRequest}/cancel', [
+            MarketplaceRequestController::class,
+            'cancel',
+        ]);
+
         Route::get('/requests/{marketplaceRequest}/offers', [
             OfferController::class,
             'index',
