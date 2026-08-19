@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Offer\AcceptOffer;
 use App\Actions\Offer\CreateOffer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOfferRequest;
 use App\Http\Resources\OfferResource;
 use App\Models\MarketplaceRequest;
-use Illuminate\Http\JsonResponse;
+use App\Models\Offer;
 use App\Support\ApiResponse;
+use Illuminate\Http\JsonResponse;
 
 class OfferController extends Controller
 {
@@ -27,6 +29,22 @@ class OfferController extends Controller
             data: new OfferResource($offer),
             message: 'Offer created successfully.',
             status: 201,
+        );
+    }
+
+    public function accept(
+        MarketplaceRequest $marketplaceRequest,
+        Offer $offer,
+        AcceptOffer $acceptOffer
+    ): OfferResource {
+        $offer = $acceptOffer->execute(
+            request: $marketplaceRequest,
+            offer: $offer,
+            user: request()->user(),
+        );
+
+        return new OfferResource(
+            $offer->load(['user', 'marketplaceRequest'])
         );
     }
 }
