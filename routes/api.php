@@ -157,6 +157,11 @@ Route::prefix('v1')->group(function () {
             'index',
         ]);
 
+        Route::get('/requests/{marketplaceRequest}/offers/{offer}', [
+            OfferController::class,
+            'show',
+        ]);
+
         Route::post('/requests/{marketplaceRequest}/offers', [
             OfferController::class,
             'store',
