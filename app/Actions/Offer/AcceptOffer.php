@@ -5,6 +5,7 @@ namespace App\Actions\Offer;
 use App\Models\MarketplaceRequest;
 use App\Models\Offer;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class AcceptOffer
 {
@@ -37,9 +38,22 @@ class AcceptOffer
             abort(422, 'This offer has expired.');
         }
 
-        $offer->update([
-            'status' => 'accepted',
-        ]);
+        DB::transaction(function () use ($request, $offer): void {
+            $offer->update([
+                'status' => 'accepted',
+            ]);
+
+            $request->update([
+                'status' => 'fulfilled',
+            ]);
+
+            $request->offers()
+                ->whereKeyNot($offer->id)
+                ->where('status', 'pending')
+                ->update([
+                    'status' => 'rejected',
+                ]);
+        });
 
         return $offer->refresh();
     }
