@@ -14,6 +14,11 @@ class MarketplaceRequestPolicy
                 && ($marketplaceRequest->expires_at === null || $marketplaceRequest->expires_at->isFuture()));
     }
 
+    public function viewOffers(User $user, MarketplaceRequest $marketplaceRequest): bool
+    {
+        return $marketplaceRequest->user_id === $user->id;
+    }
+
     public function update(User $user, MarketplaceRequest $marketplaceRequest): bool
     {
         return $marketplaceRequest->user_id === $user->id
