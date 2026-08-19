@@ -156,6 +156,11 @@ Route::prefix('v1')->group(function () {
             OfferController::class,
             'store',
         ]);
+
+        Route::post('/requests/{marketplaceRequest}/offers/{offer}/accept', [
+            OfferController::class,
+            'accept',
+        ]);
     });
 
     Route::prefix('admin')
