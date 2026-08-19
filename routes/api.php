@@ -11,8 +11,10 @@ use App\Http\Controllers\Api\V1\ListingController;
 use App\Http\Controllers\Api\V1\ListingMediaController;
 use App\Http\Controllers\Api\V1\MarketplaceRequestController;
 use App\Http\Controllers\Api\V1\OfferController;
+use App\Http\Controllers\Api\V1\ReservationController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('v1')->group(function () {
 
@@ -185,6 +187,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/requests/{marketplaceRequest}/offers/{offer}/reject', [
             OfferController::class,
             'reject',
+        ]);
+
+        Route::post('/listings/{listing}/reservation', [
+            ReservationController::class,
+            'store',
         ]);
     });
 
