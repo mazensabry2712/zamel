@@ -39,8 +39,8 @@ it('filters academic years by education type', function () {
     ]);
 
     AcademicYear::create([
-        'name' => 'First School Year',
-        'education_type' => 'school',
+        'name' => 'First Secondary Year',
+        'education_type' => 'secondary',
         'sort_order' => 1,
     ]);
 
@@ -76,7 +76,7 @@ it('returns an empty collection when the education type has no academic years', 
         'sort_order' => 1,
     ]);
 
-    $response = $this->getJson('/api/v1/academic-years?education_type=school');
+    $response = $this->getJson('/api/v1/academic-years?education_type=secondary');
 
     $response
         ->assertOk()
