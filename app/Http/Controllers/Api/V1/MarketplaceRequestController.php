@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\MarketplaceRequest\CancelMarketplaceRequest;
 use App\Actions\MarketplaceRequest\CreateMarketplaceRequest;
 use App\Actions\MarketplaceRequest\DeleteMarketplaceRequest;
 use App\Actions\MarketplaceRequest\UpdateMarketplaceRequest;
@@ -87,6 +88,22 @@ class MarketplaceRequestController extends Controller
         return ApiResponse::success(
             data: null,
             message: 'Request deleted successfully.',
+        );
+    }
+
+    public function cancel(
+        MarketplaceRequest $marketplaceRequest,
+        CancelMarketplaceRequest $cancelMarketplaceRequest,
+    ): MarketplaceRequestResource {
+        Gate::authorize('update', $marketplaceRequest);
+
+        $marketplaceRequest = $cancelMarketplaceRequest->execute(
+            marketplaceRequest: $marketplaceRequest,
+            user: request()->user(),
+        );
+
+        return new MarketplaceRequestResource(
+            $marketplaceRequest->load(['category', 'user'])
         );
     }
 }
