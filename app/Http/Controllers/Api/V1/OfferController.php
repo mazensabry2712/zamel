@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Offer\AcceptOffer;
 use App\Actions\Offer\CreateOffer;
+use App\Actions\Offer\WithdrawOffer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOfferRequest;
 use App\Http\Resources\OfferResource;
@@ -38,6 +39,22 @@ class OfferController extends Controller
         AcceptOffer $acceptOffer
     ): OfferResource {
         $offer = $acceptOffer->execute(
+            request: $marketplaceRequest,
+            offer: $offer,
+            user: request()->user(),
+        );
+
+        return new OfferResource(
+            $offer->load(['user', 'marketplaceRequest'])
+        );
+    }
+
+    public function withdraw(
+        MarketplaceRequest $marketplaceRequest,
+        Offer $offer,
+        WithdrawOffer $withdrawOffer
+    ): OfferResource {
+        $offer = $withdrawOffer->execute(
             request: $marketplaceRequest,
             offer: $offer,
             user: request()->user(),
