@@ -198,6 +198,11 @@ Route::prefix('v1')->group(function () {
             ReservationController::class,
             'confirm',
         ]);
+
+        Route::post('/listings/{listing}/reservation/{reservation}/cancel', [
+            ReservationController::class,
+            'cancel',
+        ]);
     });
 
     Route::prefix('admin')
