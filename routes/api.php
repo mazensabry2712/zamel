@@ -209,6 +209,11 @@ Route::prefix('v1')->group(function () {
             'complete',
         ]);
 
+        Route::get('/transactions', [
+            TransactionController::class,
+            'index',
+        ]);
+
         Route::get('/transactions/{transaction}', [
             TransactionController::class,
             'show',
