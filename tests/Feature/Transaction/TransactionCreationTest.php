@@ -31,20 +31,20 @@ it('uses the listing price as the transaction amount and calculates platform fee
     $buyerFee = round($amount * 0.10, 2);
     $sellerFee = round($amount * 0.10, 2);
 
-    expect((float) $transaction->amount)
-        ->toBe($amount);
+    expect(number_format((float) $transaction->amount, 2, '.', ''))
+        ->toBe(number_format($amount, 2, '.', ''));
 
-    expect((float) $transaction->platform_buyer_fee)
-        ->toBe($buyerFee);
+    expect(number_format((float) $transaction->platform_buyer_fee, 2, '.', ''))
+        ->toBe(number_format($buyerFee, 2, '.', ''));
 
-    expect((float) $transaction->platform_seller_fee)
-        ->toBe($sellerFee);
+    expect(number_format((float) $transaction->platform_seller_fee, 2, '.', ''))
+        ->toBe(number_format($sellerFee, 2, '.', ''));
 
-    expect((float) $transaction->total_amount)
-        ->toBe($amount + $buyerFee);
+    expect(number_format((float) $transaction->total_amount, 2, '.', ''))
+        ->toBe(number_format($amount + $buyerFee, 2, '.', ''));
 
-    expect((float) $transaction->seller_amount)
-        ->toBe($amount - $sellerFee);
+    expect(number_format((float) $transaction->seller_amount, 2, '.', ''))
+        ->toBe(number_format($amount - $sellerFee, 2, '.', ''));
 });
 
 it('creates transactions with pending status by default', function () {
