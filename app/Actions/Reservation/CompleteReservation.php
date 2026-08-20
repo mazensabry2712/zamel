@@ -3,6 +3,7 @@
 namespace App\Actions\Reservation;
 
 use App\Actions\Listing\MarkListingAsSold;
+use App\Actions\Transaction\CompleteTransaction;
 use App\Models\Listing;
 use App\Models\Reservation;
 use App\Models\User;
@@ -16,6 +17,7 @@ class CompleteReservation
         Listing $listing,
         Reservation $reservation,
         MarkListingAsSold $markListingAsSold,
+        CompleteTransaction $completeTransaction,
     ): Reservation {
         if ($reservation->listing_id !== $listing->id) {
             abort(404);
@@ -33,12 +35,23 @@ class CompleteReservation
             ]);
         }
 
-        return DB::transaction(function () use ($reservation, $listing, $markListingAsSold): Reservation {
+        return DB::transaction(function () use ($reservation, $listing, $markListingAsSold, $completeTransaction): Reservation {
+            $transaction = $reservation->transaction;
+
+            if (! $transaction) {
+                throw ValidationException::withMessages([
+                    'transaction' => [
+                        'This reservation does not have a transaction.',
+                    ],
+                ]);
+            }
+
             $reservation->update([
                 'status' => 'completed',
                 'completed_at' => now(),
             ]);
 
+            $completeTransaction->execute($transaction);
             $markListingAsSold->execute($listing);
 
             return $reservation->refresh();
