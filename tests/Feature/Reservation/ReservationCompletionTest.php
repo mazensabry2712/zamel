@@ -3,6 +3,7 @@
 use App\Models\Category;
 use App\Models\Listing;
 use App\Models\Reservation;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
@@ -28,6 +29,15 @@ function createCompletionScenario(): array
         'listing_id' => $listing->id,
         'user_id' => $buyer->id,
         'expires_at' => now()->addDay(),
+    ]);
+
+    // A confirmed reservation is expected to have a transaction in the current domain flow.
+    // Reservation confirmation creates it; this fixture creates the same persisted state directly.
+    Transaction::factory()->create([
+        'reservation_id' => $reservation->id,
+        'listing_id' => $listing->id,
+        'buyer_id' => $buyer->id,
+        'seller_id' => $seller->id,
     ]);
 
     return compact('seller', 'buyer', 'category', 'listing', 'reservation');
