@@ -12,9 +12,9 @@ use App\Http\Controllers\Api\V1\ListingMediaController;
 use App\Http\Controllers\Api\V1\MarketplaceRequestController;
 use App\Http\Controllers\Api\V1\OfferController;
 use App\Http\Controllers\Api\V1\ReservationController;
+use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UniversityController;
 use Illuminate\Support\Facades\Route;
-
 
 Route::prefix('v1')->group(function () {
 
@@ -207,6 +207,11 @@ Route::prefix('v1')->group(function () {
         Route::post('/listings/{listing}/reservation/{reservation}/complete', [
             ReservationController::class,
             'complete',
+        ]);
+
+        Route::get('/transactions/{transaction}', [
+            TransactionController::class,
+            'show',
         ]);
     });
 
