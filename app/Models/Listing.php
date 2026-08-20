@@ -92,4 +92,9 @@ class Listing extends Model implements HasMedia
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

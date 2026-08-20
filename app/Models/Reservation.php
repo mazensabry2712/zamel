@@ -43,4 +43,9 @@ class Reservation extends Model
     {
         return $this->belongsTo(Offer::class);
     }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
+    }
 }
