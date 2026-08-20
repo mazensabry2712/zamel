@@ -7,6 +7,7 @@ use App\Actions\Reservation\CancelReservation;
 use App\Actions\Reservation\CompleteReservation;
 use App\Actions\Reservation\ConfirmReservation;
 use App\Actions\Reservation\CreateReservation;
+use App\Actions\Transaction\CreateTransaction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReservationResource;
 use App\Models\Listing;
@@ -35,11 +36,13 @@ class ReservationController extends Controller
         Listing $listing,
         Reservation $reservation,
         ConfirmReservation $confirmReservation,
+        CreateTransaction $createTransaction,
     ): ReservationResource {
         $reservation = $confirmReservation->execute(
             user: request()->user(),
             listing: $listing,
             reservation: $reservation,
+            createTransaction: $createTransaction,
         );
 
         return new ReservationResource($reservation);
